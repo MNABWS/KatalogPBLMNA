@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KatalogKu – Poster Produk A5</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:13px 'Poppins',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;height:100dvh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1e293b;border-bottom:1px solid #334155;flex-wrap:wrap}
+header h1{font-size:16px;margin:0}header small{color:#94a3b8}#st{margin-left:auto;font-size:11px;color:#94a3b8}
+button{font:inherit;cursor:pointer;border:1px solid #475569;background:#334155;color:#e2e8f0;border-radius:8px;padding:7px 12px}
+button:hover{background:#475569}button.pri{background:linear-gradient(90deg,#f59e0b,#e11d48);border:0;color:#fff;font-weight:600}
+button:disabled{opacity:.5;cursor:wait}
+#app{flex:1;min-height:0;display:flex}
+aside{width:360px;flex-shrink:0;background:#1e293b99;border-right:1px solid #334155;display:flex;flex-direction:column;min-height:0}
+.tabs{display:flex;gap:4px;padding:6px;background:#0f172a99}.tabs button{flex:1;border:0;background:none;color:#94a3b8}.tabs button.on{background:#1e293b;color:#fbbf24}
+#pane{overflow-y:auto;padding:12px;flex:1}
+details{border:1px solid #334155;border-radius:10px;margin-bottom:10px;background:#0f172a66}
+summary{padding:9px 12px;font-weight:600;cursor:pointer}details>div{padding:0 12px 12px}
+label{display:block;margin-top:9px;color:#cbd5e1;font-size:12px}
+input[type=text],input[type=number],textarea{width:100%;margin-top:3px;background:#1e293b;border:1px solid #475569;border-radius:8px;padding:7px 9px;color:#f1f5f9;font:inherit}
+input:focus,textarea:focus{outline:2px solid #f59e0b55;border-color:#f59e0b}
+.im{display:flex;gap:8px;align-items:center;margin-top:4px}.im img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:6px}
+.im input{font-size:11px;max-width:200px}
+.hint{font-size:11px;color:#94a3b8;margin-top:4px}
+.grid{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.th{padding:6px;border-radius:10px;border:2px solid #334155;background:#0f172a;color:#e2e8f0;text-align:center}.th.on{border-color:#f59e0b}
+.tw{width:112px;height:159px;overflow:hidden;margin:0 auto 4px;border-radius:4px}
+.sw{display:flex;gap:6px;flex-wrap:wrap}.sw button{width:46px;height:30px;padding:0;border:2px solid #475569;border-radius:8px;overflow:hidden;display:flex}.sw button.on{border-color:#fbbf24}.sw i{flex:1}
+.fo button.on{border-color:#f59e0b;color:#fbbf24}
+main{flex:1;min-width:0;min-height:0;background:#020617;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#poster{width:560px;height:794px;overflow:hidden}
+#sc{transform-origin:center;flex-shrink:0;box-shadow:0 20px 50px #000a}
+#stage{position:fixed;left:-9999px;top:0}
+@media(max-width:900px){#app{flex-direction:column}aside{width:100%;order:2;border:0}main{height:56vh;flex:none;order:1}}
+@media print{@page{size:148mm 210mm;margin:0}body>*:not(#stage){display:none!important}#stage{position:static}#stage .p{transform:scale(1.1275);transform-origin:0 0}}
+
+/* ===== Poster (560 x 794 px = A5) ===== */
+.p{width:560px;height:794px;position:relative;overflow:hidden;font-family:'Poppins',sans-serif;font-size:9.5px;line-height:1.5;padding:18px 22px;display:flex;flex-direction:column;gap:10px}
+.p h1{font-family:var(--hf);margin:0;line-height:.95;font-weight:800}
+.p p{margin:0}.p ul{margin:0;padding:0;list-style:none}.p li{margin-bottom:2px}
+.tb{max-width:516px;align-self:center;display:flex;align-items:center;gap:10px;background:#fff;color:#222;border-radius:99px;padding:5px 18px;height:44px;box-shadow:0 2px 8px #0003;position:relative;z-index:2}
+.tb b{width:1px;height:24px;background:#ccc}.tb span{font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.lg{width:38px;height:32px;background:center/contain no-repeat}
+.ph{background:#00000022 center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;color:#0008;font-size:10px;flex-shrink:0}
+.pill{display:inline-block;padding:4px 16px;border-radius:99px;font-weight:700;font-size:12.5px;margin-bottom:5px}
+</style>
+</head>
+<body>
+<header>
+  <h1>KatalogKu</h1><small>Poster produk A5 untuk UMKM &amp; TEFA</small><span id="st"></span>
+  <button id="bReset">Reset contoh</button><button id="bPng">Unduh PNG</button><button id="bPdf" class="pri">Unduh PDF A5</button>
+</header>
+<div id="app">
+  <aside><div class="tabs"><button data-t="isi" class="on">1. Isi data</button><button data-t="desain">2. Desain</button></div><div id="pane"></div></aside>
+  <main><div id="sc"><div id="poster"></div></div></main>
+</div>
+<div id="stage"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+const $=q=>document.querySelector(q);
+const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const L=t=>String(t||'').split('\n').map(s=>s.trim()).filter(Boolean);
+const fmt=n=>(Number(n)||0).toLocaleString('id-ID');
+const mix=(h,t,a)=>{const p=x=>[1,3,5].map(i=>parseInt(x.slice(i,i+2),16));const A=p(h),B=p(t);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*a).toString(16).padStart(2,'0')).join('')};
+const rgba=(h,a)=>{const p=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));return `rgba(${p},${a})`};
+
+/* ---------- Data ---------- */
+const PALS=[
+ {n:'Maroon',main:'#8b1e1e',acc:'#ff7a2f',light:'#f2d9c8'},
+ {n:'Segar',main:'#35571f',acc:'#f5a300',light:'#fbf3df'},
+ {n:'Samudra',main:'#0b4f6c',acc:'#ffb703',light:'#eaf4f8'},
+ {n:'Kopi',main:'#4b2e1f',acc:'#d9a441',light:'#f6ecdc'},
+ {n:'Manis',main:'#be185d',acc:'#fbbf24',light:'#fff1f5'},
+ {n:'Ungu',main:'#4c1d95',acc:'#f59e0b',light:'#f5f3ff'},
+ {n:'Hitam Emas',main:'#1c1917',acc:'#d4af37',light:'#faf6ec'},
+ {n:'Tosca',main:'#0f766e',acc:'#fb923c',light:'#f0fdfa'}];
+const FONTS={baloo:['Tebal ramah',"'Baloo 2',sans-serif"],serif:['Klasik',"'Playfair Display',serif"],pop:['Modern',"'Poppins',sans-serif"]};
+const DEF={theme:'bold',col:{...PALS[0]},font:'baloo',
+ title:'Cwimie Sukun',headline:'Mie unik dari buah sukun, gurih & mengenyangkan',
+ desc:'Cwi Mie Sukun adalah mie unik dan inovatif yang dibuat dari bahan dasar buah sukun. Teksturnya lembut, tidak mudah lembek, serta memiliki rasa gurih alami. Disajikan dengan topping bawang segar, sambal rawit, pangsit goreng renyah, dan taburan kacang gurih.',
+ price:10000,strike:'',badge:'Hanya',note:'GRATIS 1 TEH',cta:'Yuk pesan sekarang',
+ spec:'Isi: mie sukun + pangsit goreng + bawang + sambal dan taburan tahu\nHarga: mulai Rp 10.000 sudah termasuk es teh\nKemasan: bowl / box food grade ramah lingkungan',
+ segm:'Pelajar & mahasiswa\nPekerja kantoran di sekitar kampus\nPecinta kuliner pedas\nMahasiswa yang mencari makanan sehat\nUMKM kuliner yang ingin jadi reseller',
+ adv:'Bahan utama buah sukun lokal pilihan\nTekstur mie chewy dan tidak mudah putus\nPangsit goreng renyah tahan lama\nHarga terjangkau untuk semua kalangan\nTanpa pengawet dan pewarna buatan',
+ ben:'Sumber karbohidrat alami yang lebih sehat\nMengandung serat tinggi, baik untuk pencernaan\nAlternatif mie tanpa tepung terigu\nCocok untuk gaya hidup sehat\nKenyang lebih lama',
+ campus:'Politeknik Negeri Jember',wa:'0821 4624 6956',ig:'@cwiesu_food',addr:'Jl. Tidar, Sumbersari, Jember',qr:'',
+ photo:'',logos:[]};
+const K='katalogku_html_v1';
+let d;try{d={...DEF,...JSON.parse(localStorage.getItem(K)||'{}')}}catch(e){d={...DEF}}
+d.col={...d.col};d.logos=[...(d.logos||[])];
+['logoCampus','logoExtra','logoProduct'].forEach(k=>{if(d[k])d.logos.push(d[k]);delete d[k]});
+
+/* ---------- Helper poster ---------- */
+const waLink=n=>{n=String(n||'').replace(/\D/g,'');if(!n)return'';if(n[0]=='0')n='62'+n.slice(1);return 'https://wa.me/'+n};
+const qrImg=(s=72)=>{try{const q=qrcode(0,'M');q.addData(d.qr||waLink(d.wa)||'https://github.com');q.make();return `<img src="${q.createDataURL(6,0)}" style="width:${s}px;height:${s}px;background:#fff;padding:4px;border-radius:8px;image-rendering:pixelated;flex-shrink:0">`}catch(e){return ''}};
+const tb=()=>{const l=d.logos.filter(Boolean),n=l.length,w=n?Math.max(22,Math.min(38,Math.floor(190/n))):38,sm=n>5;
+return `<div class="tb" style="gap:${sm?6:10}px">${l.map(u=>`<i class="lg" style="width:${w}px;background-image:url('${u}')"></i>`).join(sm?'':'<b></b>')}${n&&d.campus&&!sm?'<b></b>':''}${d.campus?`<span style="font-size:${sm?9:11}px">${esc(d.campus)}</span>`:''}${!n&&!d.campus?'<span>Logo kampus &amp; produk</span>':''}</div>`};
+const photo=st=>`<div class="ph" style="${st};${d.photo?`background-image:url('${d.photo}')`:''}">${d.photo?'':'Unggah foto produk'}</div>`;
+const ul=(t,col)=>`<ul>${L(t).map(x=>`<li style="display:flex;gap:5px"><i style="font-style:normal;color:${col}">●</i><span>${esc(x)}</span></li>`).join('')}</ul>`;
+const ct=()=>[d.wa&&'📞 '+d.wa,d.ig&&'📷 '+d.ig,d.addr&&'📍 '+d.addr].filter(Boolean).map(x=>`<div>${esc(x)}</div>`).join('');
+const sec=(t,b,c)=>`<div><span class="pill" style="background:${c.light};color:${c.main}">${t}</span><div style="color:${c.light};font-weight:500">${b}</div></div>`;
+const price=(big,col)=>`<div>${d.strike>0?`<div style="text-decoration:line-through;opacity:.7;font-weight:600">Rp ${fmt(d.strike)}</div>`:''}<div style="font-family:var(--hf);font-weight:800;font-size:${big}px;line-height:1;color:${col}"><small style="font-size:.38em">Rp</small> ${fmt(d.price)}</div>${d.note?`<div style="font-weight:700;letter-spacing:.05em;margin-top:2px">${esc(d.note)}</div>`:''}</div>`;
+const star=(fill,txt,tc,s=84)=>{let p='';for(let i=0;i<24;i++){const a=Math.PI*i/12,r=i%2?38:48;p+=`${50+r*Math.sin(a)},${50-r*Math.cos(a)} `}return `<svg width="${s}" height="${s}" viewBox="0 0 100 100" style="flex-shrink:0"><polygon points="${p}" fill="${fill}"/><text x="50" y="56" text-anchor="middle" font-size="17" font-weight="700" fill="${tc}" font-family="Poppins" transform="rotate(-22 50 50)">${esc(txt)}</text></svg>`};
+
+/* ---------- 4 tema dengan bentuk berbeda ---------- */
+const TH={
+bold:{n:'Poster Bold',r:(c)=>`<div class="p" style="background:${c.main}">
+<div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 100%,transparent 55%,rgba(255,255,255,.07) 56%,rgba(255,255,255,.07) 60%,transparent 61%) 0 0/46px 23px,radial-gradient(circle at 50% 100%,transparent 55%,rgba(255,255,255,.07) 56%,rgba(255,255,255,.07) 60%,transparent 61%) 23px 11px/46px 23px"></div>
+${tb()}
+<div style="display:flex;gap:14px;align-items:center;position:relative">
+ <div style="flex:1;min-width:0"><h1 style="font-size:54px;text-transform:uppercase;color:${c.light}">${esc(d.title)}</h1><p style="margin-top:8px;font-weight:600;color:${c.acc};font-size:11px">${esc(d.headline)}</p></div>
+ ${photo(`width:205px;height:205px;border-radius:50%;border:6px solid ${c.acc}`)}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative">
+ <div>${sec('Deskripsi produk',`<p>${esc(d.desc)}</p>`,c)}</div>
+ <div>${sec('Spesifikasi produk',ul(d.spec,c.acc),c)}</div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative">
+ <div style="display:flex;gap:6px;align-items:center;color:${c.light}">${d.badge?star(c.light,d.badge,c.main):''}<div><div style="color:${c.light}">${price(46,c.acc)}</div><span class="pill" style="background:${c.light};color:${c.main};margin:8px 0 0">${esc(d.cta)}</span></div></div>
+ <div>${sec('Segmentasi pasar',ul(d.segm,c.acc),c)}</div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative">
+ <div>${sec('Keunggulan',ul(d.adv,c.acc),c)}</div><div>${sec('Manfaat',ul(d.ben,c.acc),c)}</div></div>
+<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;color:${c.light};font-weight:600;position:relative"><div>${ct()}</div>${qrImg(76)}</div></div>`},
+
+fresh:{n:'Blob Segar',r:(c)=>`<div class="p" style="background:${c.light};color:${c.ink}">
+<svg style="position:absolute;left:0;top:0" width="330" height="210" viewBox="0 0 330 210"><path d="M0 0H330C318 55 262 62 218 100C172 140 98 128 52 170C30 190 14 200 0 210Z" fill="${c.acc}"/></svg>
+<svg style="position:absolute;right:0;top:330px" width="70" height="170" viewBox="0 0 70 170"><path d="M70 0C40 30 48 70 30 105C18 135 0 150 0 170H70Z" fill="${c.main}"/></svg>
+${tb()}
+<div style="text-align:center;position:relative;padding:0 30px"><h1 style="font-size:46px;color:${c.main}">${esc(d.title)}</h1><p style="margin-top:6px;font-weight:600;font-size:11.5px">${esc(d.headline)}</p></div>
+<div style="position:relative;height:290px">
+ ${photo(`position:absolute;left:50%;margin-left:-137px;top:0;width:274px;height:274px;border-radius:50%;border:8px solid #fff;box-shadow:0 8px 24px rgba(0,0,0,.25)`)}
+ <div style="position:absolute;left:6px;bottom:0;width:122px;height:122px;border-radius:50%;background:${c.main};color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.3)">${price(26,c.acc).replace('<div>','<div style="text-align:center">')}</div>
+ ${d.badge?`<div style="position:absolute;right:6px;top:20px;background:${c.acc};color:${c.main};font-weight:800;padding:6px 14px;border-radius:99px;transform:rotate(6deg);font-size:12px">${esc(d.badge)}</div>`:''}</div>
+<p style="text-align:center;padding:0 24px;position:relative">${esc(d.desc)}</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative">${L(d.adv).slice(0,4).map(x=>`<div style="background:#fff;border:1.5px solid ${c.main};color:${c.main};border-radius:99px;padding:4px 10px;font-weight:600;text-align:center">${esc(x)}</div>`).join('')}</div>
+<div style="margin:auto -22px 0;background:${c.main};color:${c.light};border-radius:36px 36px 0 0;padding:14px 26px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative">
+ <div style="font-weight:600"><div style="font-family:var(--hf);font-weight:800;font-size:15px;color:${c.acc};margin-bottom:3px">${esc(d.cta)}</div>${ct()}</div>${qrImg(72)}</div></div>`},
+
+split:{n:'Editorial Split',r:(c)=>`<div class="p" style="background:${c.light};color:${c.ink}">
+${tb()}
+<div style="display:flex;gap:14px;flex:1;min-height:0">
+ <div style="width:160px;flex-shrink:0;background:${c.main};color:${c.light};border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:9px">
+  ${d.badge?`<span style="align-self:flex-start;background:${c.acc};color:${c.main};font-weight:800;padding:3px 12px;border-radius:99px;font-size:11px">${esc(d.badge)}</span>`:''}
+  ${price(36,c.acc)}
+  <div style="background:${c.acc};color:${c.main};text-align:center;font-weight:800;border-radius:99px;padding:7px 6px;font-size:10.5px">${esc(d.cta)}</div>
+  <div style="margin-top:auto;font-weight:500;font-size:8.5px;line-height:1.45">${ct()}</div>${qrImg(78)}</div>
+ <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:9px">
+  ${photo('height:230px;width:100%;border-radius:20px')}
+  <div><h1 style="font-size:36px;color:${c.main}">${esc(d.title)}</h1><p style="margin-top:5px;font-weight:600;font-size:11px">${esc(d.headline)}</p></div>
+  <p>${esc(d.desc)}</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+   <div><div style="font-weight:700;font-size:12px;color:${c.main};border-bottom:2px solid ${c.acc};margin-bottom:4px">Keunggulan</div>${ul(d.adv,c.acc)}</div>
+   <div><div style="font-weight:700;font-size:12px;color:${c.main};border-bottom:2px solid ${c.acc};margin-bottom:4px">Manfaat</div>${ul(d.ben,c.acc)}</div></div>
+  <div style="background:#fff;border-left:4px solid ${c.acc};border-radius:10px;padding:8px 10px"><b style="color:${c.main}">Spesifikasi</b>${ul(d.spec,c.main)}</div></div></div></div>`},
+
+cover:{n:'Foto Penuh',r:(c)=>`<div class="p" style="background:${c.light};color:${c.ink};padding:0;gap:0">
+${photo('position:absolute;left:0;top:0;width:100%;height:380px')}
+<div style="position:absolute;left:0;top:0;width:100%;height:380px;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,${rgba(c.main,.95)} 100%)"></div>
+<div style="position:absolute;top:16px;left:0;right:0;display:flex;justify-content:center">${tb()}</div>
+<div style="position:absolute;left:24px;right:24px;top:262px;color:#fff"><h1 style="font-size:46px;text-shadow:0 2px 8px rgba(0,0,0,.4)">${esc(d.title)}</h1><p style="margin-top:6px;font-weight:600;font-size:11.5px">${esc(d.headline)}</p></div>
+<div style="position:absolute;left:0;right:0;top:350px;bottom:0;background:${c.light};border-radius:28px 28px 0 0;padding:18px 22px;display:flex;flex-direction:column;gap:9px">
+ <div style="position:absolute;right:22px;top:-52px;width:104px;height:104px;border-radius:50%;background:${c.acc};color:${c.main};display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.3)">${price(24,c.main).replace('<div>','<div style="text-align:center">')}</div>
+ <p style="padding-right:112px">${esc(d.desc)}</p>
+ <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+ ${[['Spesifikasi',d.spec],['Keunggulan',d.adv],['Manfaat',d.ben]].map(([t,v])=>`<div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.2)"><div style="background:${c.main};color:#fff;font-weight:700;padding:4px 9px;font-size:10px">${t}</div><div style="padding:6px 9px;font-size:8.8px">${ul(v,c.acc)}</div></div>`).join('')}</div>
+ <p style="font-size:9px"><b style="color:${c.main}">Cocok untuk:</b> ${L(d.segm).map(esc).join(' · ')}</p>
+ <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px"><div style="font-weight:600"><span class="pill" style="background:${c.main};color:#fff;margin-bottom:4px">${esc(d.cta)}</span>${ct()}</div>${qrImg(76)}</div></div></div>`},
+pop:{n:'Pop Sticker',r:c=>`<div class="p" style="background:${c.acc};color:${c.ink}">
+<div style="position:absolute;inset:0;background:radial-gradient(${rgba(c.main,.2)} 22%,transparent 24%) 0 0/16px 16px"></div>
+${tb()}
+<div style="position:relative;text-align:center"><h1 style="font-size:50px;color:#fff;text-transform:uppercase;text-shadow:3px 3px 0 ${c.main},-1px -1px 0 ${c.main},1px -1px 0 ${c.main},-1px 1px 0 ${c.main}">${esc(d.title)}</h1><p style="display:inline-block;background:${c.main};color:#fff;font-weight:700;padding:3px 14px;border-radius:99px;margin-top:10px;transform:rotate(-2deg)">${esc(d.headline)}</p></div>
+<div style="position:relative;height:268px;flex-shrink:0">
+ ${photo(`position:absolute;left:50%;margin-left:-125px;top:8px;width:250px;height:250px;border-radius:22px;border:8px solid #fff;transform:rotate(-4deg);box-shadow:0 8px 18px rgba(0,0,0,.3)`)}
+ ${d.badge?`<div style="position:absolute;right:6px;top:4px">${star(c.main,d.badge,'#fff',100)}</div>`:''}
+ <div style="position:absolute;left:8px;bottom:4px;background:#fff;color:${c.main};border-radius:16px;padding:8px 14px;transform:rotate(3deg);box-shadow:0 4px 12px rgba(0,0,0,.3)">${price(30,c.main)}</div></div>
+<p style="position:relative;text-align:center;font-weight:500;padding:0 18px">${esc(d.desc)}</p>
+<div style="position:relative;display:flex;flex-wrap:wrap;gap:6px;justify-content:center">${L(d.adv).slice(0,5).map((x,i)=>`<span style="background:#fff;border:2px solid ${c.main};border-radius:99px;padding:3px 11px;font-weight:700;color:${c.main};transform:rotate(${i%2?2:-2}deg)">${esc(x)}</span>`).join('')}</div>
+<div style="margin:auto -22px 0;background:#fff;padding:12px 26px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative"><div style="font-weight:600"><div style="font-family:var(--hf);font-weight:800;font-size:15px;color:${c.main}">${esc(d.cta)}</div>${ct()}</div>${qrImg(70)}</div></div>`},
+
+diag:{n:'Diagonal Dinamis',r:c=>`<div class="p" style="background:${c.light};color:${c.ink}">
+<div style="position:absolute;left:-80px;top:20px;width:720px;height:410px;transform:rotate(-8deg)"><div style="height:400px;background:${c.main}"></div><div style="height:10px;background:${c.acc}"></div></div>
+${tb()}
+<div style="position:relative;display:flex;gap:12px;align-items:center;margin-top:6px">
+ <div style="flex:1;min-width:0;color:#fff"><h1 style="font-size:48px;color:#fff">${esc(d.title)}</h1><p style="margin:6px 0 10px;font-weight:600;color:${c.light}">${esc(d.headline)}</p>${d.badge?`<span style="display:inline-block;background:${c.acc};color:${c.main};font-weight:800;padding:2px 12px;border-radius:99px;margin-bottom:6px">${esc(d.badge)}</span>`:''}${price(40,c.acc)}</div>
+ ${photo(`width:210px;height:210px;border-radius:50%;border:6px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.35)`)}</div>
+<div style="position:relative;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 4px 14px rgba(0,0,0,.2);display:flex;flex-direction:column;gap:8px">
+ <p>${esc(d.desc)}</p>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><b style="color:${c.main};font-size:11px">Keunggulan</b>${ul(d.adv,c.acc)}</div><div><b style="color:${c.main};font-size:11px">Manfaat</b>${ul(d.ben,c.acc)}</div></div>
+ <p style="font-size:8.8px;color:${c.main}"><b>Cocok untuk:</b> ${L(d.segm).map(esc).join(' · ')}</p></div>
+<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative"><div style="font-weight:600"><span class="pill" style="background:${c.main};color:#fff">${esc(d.cta)}</span>${ct()}</div>${qrImg(72)}</div></div>`},
+
+bento:{n:'Bento Grid',r:c=>{const T=(st,h)=>`<div style="border-radius:18px;padding:11px;overflow:hidden;${st}">${h}</div>`;const H=(t,col)=>`<div style="font-weight:800;font-size:11px;color:${col};margin-bottom:4px">${t}</div>`;
+return `<div class="p" style="background:${c.light};color:${c.ink};padding:16px;gap:8px">
+${tb()}
+<div style="flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:128px 128px auto 1fr auto;gap:8px">
+${photo('grid-column:1/3;grid-row:1/3;border-radius:18px')}
+${T(`background:${c.main};color:#fff;display:flex;flex-direction:column;justify-content:center`,`<h1 style="font-size:24px;color:#fff">${esc(d.title)}</h1><p style="margin-top:5px;font-size:9px;opacity:.9">${esc(d.headline)}</p>`)}
+${T(`background:${c.acc};color:${c.main};display:flex;flex-direction:column;justify-content:center`,`${d.badge?`<b style="font-size:10px">${esc(d.badge)}</b>`:''}${price(26,c.main)}`)}
+${T('grid-column:1/4;background:#fff',`<p>${esc(d.desc)}</p><p style="margin-top:4px;font-size:8.8px;color:${c.main}"><b>Cocok untuk:</b> ${L(d.segm).map(esc).join(' · ')}</p>`)}
+${T('background:#fff',H('Spesifikasi',c.main)+ul(d.spec,c.acc))}
+${T(`background:${c.main};color:${c.light}`,H('Keunggulan',c.acc)+ul(d.adv,c.acc))}
+${T(`background:${c.acc};color:${c.ink}`,H('Manfaat',c.main)+ul(d.ben,c.main))}
+${T(`grid-column:1/4;background:${c.main};color:${c.light};display:flex;justify-content:space-between;align-items:center;gap:10px`,`<div style="font-weight:600"><div style="font-family:var(--hf);font-weight:800;font-size:15px;color:${c.acc}">${esc(d.cta)}</div>${ct()}</div>${qrImg(64)}`)}
+</div></div>`}},
+
+minimal:{n:'Minimal Swiss',r:c=>{const H=t=>`<div style="font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:${c.main};border-bottom:1px solid ${rgba(c.main,.35)};padding-bottom:3px;margin-bottom:5px">${t}</div>`;
+return `<div class="p" style="background:#fff;color:${c.ink};padding:22px 26px;gap:11px">
+${tb()}
+<div style="border-top:3px solid ${c.main};padding-top:8px;display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><h1 style="font-size:42px;color:${c.main}">${esc(d.title)}</h1>${d.badge?`<span style="font-weight:700;color:${c.acc};white-space:nowrap">${esc(d.badge)}</span>`:''}</div>
+<p style="margin-top:-5px;color:#555;font-weight:500">${esc(d.headline)}</p>
+${photo('width:100%;height:215px')}
+<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:22px"><div><p>${esc(d.desc)}</p><div style="margin-top:9px">${H('Spesifikasi')}${ul(d.spec,c.main)}</div></div>
+ <div><div style="color:${c.main}">${price(34,c.main)}</div><div style="margin-top:9px">${H('Keunggulan')}${ul(d.adv,c.main)}</div></div></div>
+<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:22px"><div>${H('Manfaat')}${ul(d.ben,c.main)}</div><div>${H('Cocok untuk')}${ul(d.segm,c.main)}</div></div>
+<div style="margin-top:auto;border-top:1px solid ${rgba(c.main,.35)};padding-top:9px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div><b style="color:${c.main}">${esc(d.cta)}</b>${ct()}</div>${qrImg(60)}</div></div>`}},
+
+retro:{n:'Retro Klasik',r:c=>{const H=t=>`<div style="color:${c.main};font-weight:800;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;text-align:center">${t}</div>`,top4=t=>L(t).slice(0,4).join('\n'),
+orn=`<div style="position:relative;display:flex;align-items:center;gap:8px;color:${c.acc};font-size:12px"><i style="flex:1;height:1px;background:${rgba(c.main,.5)}"></i>✦<i style="flex:1;height:1px;background:${rgba(c.main,.5)}"></i></div>`;
+return `<div class="p" style="--hf:'Playfair Display',serif;background:${c.light};color:${c.ink};padding:28px 32px;gap:9px;text-align:center;font-family:'Playfair Display',serif">
+<div style="position:absolute;left:10px;top:10px;right:10px;bottom:10px;border:3px solid ${c.main}"></div><div style="position:absolute;left:16px;top:16px;right:16px;bottom:16px;border:1px solid ${c.main}"></div>
+${tb()}
+<div style="position:relative">${d.badge?`<div style="letter-spacing:.3em;font-size:8.5px;font-weight:700;color:${c.acc};margin-bottom:2px">— ${esc(d.badge).toUpperCase()} —</div>`:''}<h1 style="font-size:42px;color:${c.main};text-transform:uppercase;font-weight:900">${esc(d.title)}</h1><p style="font-style:italic;font-size:11.5px;margin-top:5px">${esc(d.headline)}</p></div>
+${orn}
+<div style="position:relative;height:222px;flex-shrink:0">
+ ${photo(`position:absolute;left:50%;margin-left:-102px;top:4px;width:204px;height:204px;border-radius:50%;border:4px solid ${c.light};box-shadow:0 0 0 3px ${c.main}`)}
+ <div style="position:absolute;left:50%;margin-left:58px;bottom:0;width:108px;height:108px;border-radius:50%;background:${c.main};display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px ${c.light},0 0 0 4px ${c.main},0 4px 10px rgba(0,0,0,.3)"><div style="border:1.5px dashed ${c.acc};border-radius:50%;width:98px;height:98px;display:flex;align-items:center;justify-content:center;color:${c.acc};padding:0 4px">${price(20,c.acc).replace('<div>','<div style="text-align:center;font-size:8.5px">')}</div></div></div>
+<p style="position:relative;padding:0 6px;line-height:1.55">${esc(d.desc)}</p>
+${orn}
+<div style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:18px;font-size:9px"><div>${H('Keunggulan')}<div style="text-align:left">${ul(top4(d.adv),c.acc)}</div></div><div>${H('Manfaat')}<div style="text-align:left">${ul(top4(d.ben),c.acc)}</div></div></div>
+<div style="margin-top:auto;position:relative;border-top:1px solid ${c.main};padding-top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left"><div style="font-weight:600"><b style="color:${c.main}">${esc(d.cta)}</b>${ct()}</div>${qrImg(58)}</div></div>`}},
+
+arch:{n:'Elegan Gelap',r:c=>{const H=t=>`<div style="color:${c.acc};font-weight:700;font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px">${t}</div>`,ln=`<i style="flex:1;height:1px;background:${rgba(c.acc,.6)}"></i>`;
+return `<div class="p" style="--hf:'Playfair Display',serif;background:${c.ink};color:${c.light};align-items:center;text-align:center">
+<div style="position:absolute;left:10px;top:10px;right:10px;bottom:10px;border:1px solid ${rgba(c.acc,.6)}"></div>
+${tb()}
+${photo(`width:220px;height:235px;border-radius:110px 110px 0 0;border:2px solid ${c.acc};box-shadow:0 0 0 5px ${c.ink},0 0 0 6px ${rgba(c.acc,.6)}`)}
+<div>${d.badge?`<div style="letter-spacing:.3em;font-size:8px;color:${c.acc};text-transform:uppercase;margin-bottom:3px">${esc(d.badge)}</div>`:''}<h1 style="font-size:36px;letter-spacing:.08em;text-transform:uppercase;color:${c.acc}">${esc(d.title)}</h1><p style="font-style:italic;margin-top:5px;font-size:11px">${esc(d.headline)}</p></div>
+<div style="display:flex;align-items:center;gap:12px;width:100%">${ln}<div style="color:${c.acc}">${price(32,c.acc).replace('<div>','<div style="text-align:center">')}</div>${ln}</div>
+<p style="padding:0 14px;opacity:.85">${esc(d.desc)}</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;text-align:left;width:100%;padding:0 6px"><div>${H('Keunggulan')}${ul(d.adv,c.acc)}</div><div>${H('Manfaat')}${ul(d.ben,c.acc)}</div></div>
+<div style="margin-top:auto;width:100%;border-top:1px solid ${rgba(c.acc,.6)};padding-top:9px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left"><div style="font-weight:500"><b style="color:${c.acc}">${esc(d.cta)}</b>${ct()}</div>${qrImg(58)}</div></div>`}}
+
+};
+
+/* ---------- Render ---------- */
+const col=()=>({...d.col,ink:mix(d.col.main,'#000000',.55)});
+const posterHTML=(t=d.theme)=>`<div style="--hf:${FONTS[d.font][1]}">${TH[t].r(col())}</div>`;
+let thumbsOn=false;
+function render(){
+  const h=posterHTML();$('#poster').innerHTML=h;$('#stage').innerHTML=h;
+  if(thumbsOn)drawThumbs();
+}
+let tm;function save(){clearTimeout(tm);tm=setTimeout(()=>{try{localStorage.setItem(K,JSON.stringify(d));st('Tersimpan otomatis ✓')}catch(e){st('Penyimpanan penuh – gunakan foto lebih kecil')}},500)}
+const st=t=>$('#st').textContent=t;
+const upd=()=>{render();save()};
+
+/* ---------- Form ---------- */
+const GROUPS=[
+['Logo & kampus (tampil sejajar di atas)',[['logos','Logo (bisa lebih dari 3)','logos'],['campus','Nama kampus (di samping logo)','text',0,'Kosongkan jika tidak ingin menampilkan teks.']]],
+['Produk',[['title','Nama produk','text'],['headline','Kalimat pemikat','text'],['photo','Foto produk','img'],['desc','Deskripsi singkat','area',4],['price','Harga (Rp)','num'],['strike','Harga coret (opsional)','num',0,'Kosongkan jika tidak ada diskon.'],['badge','Label harga','text',0,'Kosongkan jika tidak perlu.',['Hanya','Promo','Diskon','Baru','Kosongkan']],['note','Catatan harga / bonus','text',0,'Kosongkan jika tidak ada gratisan atau bonus.',['GRATIS 1 TEH','Gratis ongkir','Beli 2 diskon 10%','Stok terbatas','Kosongkan']]]],
+['Isi poster — 1 baris = 1 poin',[['spec','Spesifikasi','area',4],['segm','Segmentasi pasar','area',4],['adv','Keunggulan','area',5],['ben','Manfaat','area',5]]],
+['Kontak & pemesanan',[['wa','WhatsApp','text'],['ig','Instagram','text'],['addr','Alamat','area',2],['cta','Ajakan pesan','text'],['qr','Link QR (kosong = otomatis ke WhatsApp)','text']]]];
+
+function fileData(f,max){return new Promise((ok,no)=>{const r=new FileReader();r.onerror=no;r.onload=()=>{const i=new Image();i.onerror=no;i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);const x=c.getContext('2d'),png=/png|svg/.test(f.type);if(!png){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height)}x.drawImage(i,0,0,c.width,c.height);ok(c.toDataURL(png?'image/png':'image/jpeg',.85))};i.src=r.result};r.readAsDataURL(f)})}
+
+function logoUI(lb){
+  const w=document.createElement('div');w.style.marginTop='4px';
+  const show=()=>{w.innerHTML=`<div style="color:#cbd5e1;font-size:12px">${lb}</div>`+d.logos.map((u,i)=>`<div class="im"><img src="${u}"><span style="flex:1;font-size:11px;color:#94a3b8">Logo ${i+1}</span><button type="button" data-a="l" data-i="${i}" ${i?'':'disabled'}>◀</button><button type="button" data-a="r" data-i="${i}" ${i<d.logos.length-1?'':'disabled'}>▶</button><button type="button" data-a="x" data-i="${i}">Hapus</button></div>`).join('')+`<div class="im"><input type="file" accept="image/*" multiple ${d.logos.length>=8?'disabled':''}></div><div class="hint">Maksimal 8 logo, tampil berurutan dari kiri. Bisa pilih beberapa file sekaligus. Contoh: kampus, jurusan, BLU, brand produk.</div>`};
+  w.onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,a=b.dataset.a;if(a=='x')d.logos.splice(i,1);else{const j=a=='l'?i-1:i+1;[d.logos[i],d.logos[j]]=[d.logos[j],d.logos[i]]}show();upd()};
+  w.onchange=async e=>{if(e.target.type!='file')return;for(const f of e.target.files){if(d.logos.length>=8)break;try{d.logos.push(await fileData(f,400))}catch(x){st('Gambar tidak bisa dibaca')}}show();upd()};
+  show();return w;
+}
+function buildIsi(){
+  const p=$('#pane');p.innerHTML='';
+  GROUPS.forEach(([t,fs],gi)=>{
+    const det=document.createElement('details');det.open=gi<2;det.innerHTML=`<summary>${t}</summary><div></div>`;
+    const box=det.lastChild;
+    fs.forEach(([k,lb,ty,rows,hint,chips])=>{
+      if(ty=='logos'){box.appendChild(logoUI(lb));return}
+      const l=document.createElement('label');l.textContent=lb;
+      if(ty=='img'){
+        const w=document.createElement('div');w.className='im';
+        const show=()=>{w.innerHTML=(d[k]?`<img src="${d[k]}"><button type="button">Hapus</button>`:'')+'<input type="file" accept="image/*">';
+          if(d[k])w.querySelector('button').onclick=()=>{d[k]='';show();upd()};
+          w.querySelector('input').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{d[k]=await fileData(f,k=='photo'?1000:400);show();upd()}catch(x){st('Gambar tidak bisa dibaca')}}};
+        show();l.appendChild(w);
+      }else{
+        const i=document.createElement(ty=='area'?'textarea':'input');if(ty=='area')i.rows=rows;else i.type=ty=='num'?'number':'text';
+        i.value=d[k]??'';i.oninput=()=>{d[k]=ty=='num'?Number(i.value):i.value;upd()};l.appendChild(i);
+        if(hint){const h=document.createElement('div');h.className='hint';h.textContent=hint;l.appendChild(h)}
+        if(chips){const c=document.createElement('div');c.style.cssText='display:flex;gap:5px;flex-wrap:wrap;margin-top:6px';
+          chips.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t;b.style.cssText='padding:3px 9px;font-size:11px';
+            b.onclick=e=>{e.preventDefault();const v=t=='Kosongkan'?'':t;i.value=v;d[k]=v;upd()};c.appendChild(b)});l.appendChild(c)}
+      }
+      box.appendChild(l);
+    });
+    p.appendChild(det);
+  });
+}
+function buildDesain(){
+  const p=$('#pane');
+  p.innerHTML=`<label style="margin-top:0">Bentuk poster</label><div class="grid" id="ths"></div>
+  <label style="margin-top:16px">Warna siap pakai</label><div class="sw" id="sw"></div>
+  <div class="grid" style="margin-top:8px">${[['main','Utama'],['acc','Sorot'],['light','Terang']].map(([k,n])=>`<label style="margin:0">${n}<input type="color" data-c="${k}" value="${d.col[k]}" style="width:100%;height:32px;margin-top:3px;background:none;border:0"></label>`).join('')}</div>
+  <label style="margin-top:16px">Gaya huruf judul</label><div class="grid fo" id="fo"></div>
+  <p class="hint">Tiap bentuk menampilkan isi dengan susunan berbeda; sebagian tema meringkas isi agar tetap lega.</p>`;
+  $('#sw').innerHTML=PALS.map((x,i)=>`<button title="${x.n}" data-i="${i}"><i style="background:${x.main}"></i><i style="background:${x.acc}"></i><i style="background:${x.light}"></i></button>`).join('');
+  $('#sw').onclick=e=>{const b=e.target.closest('button');if(!b)return;d.col={...PALS[b.dataset.i]};buildDesain();upd()};
+  p.querySelectorAll('[data-c]').forEach(i=>i.oninput=()=>{d.col[i.dataset.c]=i.value;upd()});
+  $('#fo').innerHTML=Object.entries(FONTS).map(([k,v])=>`<button data-f="${k}" class="${d.font==k?'on':''}" style="font-family:${v[1]}">${v[0]}</button>`).join('');
+  $('#fo').onclick=e=>{const b=e.target.closest('button');if(!b)return;d.font=b.dataset.f;buildDesain();upd()};
+  $('#ths').onclick=e=>{const b=e.target.closest('.th');if(!b)return;d.theme=b.dataset.t;upd()};
+  thumbsOn=true;drawThumbs();
+}
+function drawThumbs(){
+  const g=$('#ths');if(!g)return;
+  g.innerHTML=Object.keys(TH).map(k=>`<button class="th ${d.theme==k?'on':''}" data-t="${k}"><div class="tw"><div style="width:560px;transform:scale(.2);transform-origin:0 0;pointer-events:none">${posterHTML(k)}</div></div>${TH[k].n}</button>`).join('');
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x==b));
+  thumbsOn=false;b.dataset.t=='isi'?buildIsi():buildDesain();
+});
+
+/* ---------- Pas layar ---------- */
+function fit(){const m=$('main'),z=Math.min((m.clientWidth-24)/560,(m.clientHeight-24)/794);$('#sc').style.transform=`scale(${Math.max(.3,z)})`;$('#sc').style.margin=`${(794*Math.max(.3,z)-794)/2}px ${(560*Math.max(.3,z)-560)/2}px`}
+new ResizeObserver(fit).observe($('main'));
+
+/* ---------- Ekspor ---------- */
+async function snap(){
+  if(!window.html2canvas)throw new Error('Pustaka ekspor belum termuat. Periksa koneksi internet.');
+  await document.fonts.ready;await new Promise(r=>setTimeout(r,400));
+  return html2canvas($('#stage .p'),{scale:3,useCORS:true,backgroundColor:null,logging:false});
+}
+async function run(kind){
+  const bs=[$('#bPdf'),$('#bPng')];bs.forEach(b=>b.disabled=true);st('Menyiapkan file…');
+  try{
+    const c=await snap(),name=(d.title||'poster').replace(/[^\w]+/g,'_');
+    if(kind=='png'){const a=document.createElement('a');a.download=name+'_A5.png';a.href=c.toDataURL('image/png');a.click()}
+    else{const pdf=new jspdf.jsPDF({unit:'mm',format:[148,210]});pdf.addImage(c.toDataURL('image/jpeg',.95),'JPEG',0,0,148,210);pdf.save(name+'_A5.pdf')}
+    st('Berhasil diunduh ✓');
+  }catch(e){console.error(e);st('Ekspor gagal: '+e.message)}
+  bs.forEach(b=>b.disabled=false);
+}
+$('#bPdf').onclick=()=>run('pdf');$('#bPng').onclick=()=>run('png');
+$('#bReset').onclick=()=>{if(confirm('Kembalikan semua isi ke contoh awal?')){d=JSON.parse(JSON.stringify(DEF));document.querySelector('.tabs button').click();upd()}};
+
+buildIsi();render();fit();
+</script>
+</body>
+</html>
